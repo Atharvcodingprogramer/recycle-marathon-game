@@ -11,6 +11,13 @@ gamecomplete = False
 animations  = []
 images = ["batteryimg","chipsimg","bottleimg","bagimg"]
 actors = []
+def stopanimations() :
+    global animations
+    for animation in animations :
+        if animation.running :
+            animation.stop()
+
+
 def createactors() :
     global actors
     actorimages = ["paperimg"]
@@ -40,9 +47,9 @@ def endgame() :
 def draw() :
     screen.blit("bground",(0,0))
     if gameover == True :
-        screen.draw.text("Game over" , (400,400))
+        screen.draw.text("Game over" , (400,400),color = "blue")
     elif gamecomplete == True :
-        screen.draw.text("Game completed Good job", (400,400))
+        screen.draw.text("Game completed Good job", (400,400),color = "blue")
     else :
         screen.draw.text(f"level {level}", (10,10))
         for actor in actors :
@@ -52,12 +59,14 @@ createactors()
 
 def on_mouse_down(pos) :
     global level
+
     global gameover
     global gamecomplete
     for actor in actors :
         if actor.collidepoint(pos) :
             if actor.image == "paperimg" :
                 level = level + 1 
+                stopanimations()
                 if level > endlevel :
                     gamecomplete = True
                 else :
